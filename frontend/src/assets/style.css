@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: #f9fafb;
+  color: #111827;
+}
+
+/* Question card */
+.question-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 20px 24px;
+  transition: box-shadow 0.15s;
+}
+.question-card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+.question-card.active {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+}
+
+/* Option item */
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.option-item:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+.option-item.selected {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+/* Builder sidebar */
+.builder-sidebar {
+  width: 272px;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Drag handle */
+.drag-handle {
+  color: #d1d5db;
+  cursor: grab;
+}
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }

@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "autoname": "FRES-.YYYY.-.#####",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "survey", "survey_code", "completion_status",
+  "respondent_name", "respondent_email",
+  "start_time", "end_time", "submitted_on",
+  "ip_address", "answers_data"
+ ],
+ "fields": [
+  {"fieldname": "survey", "fieldtype": "Link", "label": "Survey", "options": "Forms Survey", "reqd": 1},
+  {"fieldname": "survey_code", "fieldtype": "Data", "label": "Survey Code"},
+  {"fieldname": "completion_status", "fieldtype": "Select", "label": "Status", "options": "Draft\nCompleted\nAbandoned", "default": "Draft"},
+  {"fieldname": "respondent_name", "fieldtype": "Data", "label": "Respondent Name"},
+  {"fieldname": "respondent_email", "fieldtype": "Data", "label": "Respondent Email"},
+  {"fieldname": "start_time", "fieldtype": "Datetime", "label": "Start Time"},
+  {"fieldname": "end_time", "fieldtype": "Datetime", "label": "End Time"},
+  {"fieldname": "submitted_on", "fieldtype": "Datetime", "label": "Submitted On"},
+  {"fieldname": "ip_address", "fieldtype": "Data", "label": "IP Address"},
+  {"fieldname": "answers_data", "fieldtype": "Long Text", "label": "Answers (JSON)"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Forms",
+ "name": "Forms Response",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "write": 1, "role": "System Manager"},
+  {"create": 1, "delete": 1, "read": 1, "write": 1, "role": "Survey Manager"},
+  {"create": 1, "read": 1, "write": 1, "role": "All", "if_owner": 1}
+ ],
+ "sort_field": "submitted_on",
+ "sort_order": "DESC",
+ "track_changes": 0
+}

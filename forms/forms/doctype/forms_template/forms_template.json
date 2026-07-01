@@ -1,0 +1,32 @@
+{
+ "actions": [],
+ "autoname": "field:template_name",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": ["template_name", "category", "description", "is_system_template", "survey_data"],
+ "fields": [
+  {"fieldname": "template_name", "fieldtype": "Data", "label": "Template Name", "reqd": 1, "unique": 1},
+  {"fieldname": "category", "fieldtype": "Data", "label": "Category"},
+  {"fieldname": "description", "fieldtype": "Text", "label": "Description"},
+  {"fieldname": "is_system_template", "fieldtype": "Check", "label": "System Template", "default": 0},
+  {"fieldname": "survey_data", "fieldtype": "Long Text", "label": "Survey Data (JSON)"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Forms",
+ "name": "Forms Template",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "write": 1, "role": "System Manager"},
+  {"read": 1, "role": "All"}
+ ],
+ "sort_field": "template_name",
+ "sort_order": "ASC",
+ "title_field": "template_name",
+ "track_changes": 0
+}

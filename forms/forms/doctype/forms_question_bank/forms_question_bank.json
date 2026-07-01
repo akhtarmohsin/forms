@@ -1,0 +1,31 @@
+{
+ "actions": [],
+ "autoname": "field:question",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": ["question", "question_type", "category", "options"],
+ "fields": [
+  {"fieldname": "question", "fieldtype": "Data", "label": "Question", "reqd": 1, "unique": 1},
+  {"fieldname": "question_type", "fieldtype": "Data", "label": "Question Type"},
+  {"fieldname": "category", "fieldtype": "Data", "label": "Category"},
+  {"fieldname": "options", "fieldtype": "Long Text", "label": "Options (JSON)"}
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Forms",
+ "name": "Forms Question Bank",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "read": 1, "write": 1, "role": "System Manager"},
+  {"create": 1, "read": 1, "write": 1, "role": "All", "if_owner": 1}
+ ],
+ "sort_field": "question",
+ "sort_order": "ASC",
+ "title_field": "question",
+ "track_changes": 0
+}
