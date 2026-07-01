@@ -20,10 +20,8 @@ from frappe.utils import cstr, get_url, now_datetime
 
 @frappe.whitelist()
 def get_surveys(status: str | None = None, search: str | None = None) -> list:
-	"""List surveys owned by the current user (or all, for Survey Manager)."""
-	filters: dict = {}
-	if not frappe.has_permission("Forms Survey", "read", throw=False):
-		filters["owner"] = frappe.session.user
+	"""List surveys owned by the current user only."""
+	filters: dict = {"owner": frappe.session.user}
 	if status:
 		filters["status"] = status
 
