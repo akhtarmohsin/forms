@@ -35,9 +35,19 @@ export function getQuestionType(value) {
 	return QUESTION_TYPES.find((q) => q.value === value);
 }
 
+export function generateId() {
+	if (typeof crypto !== "undefined" && crypto.randomUUID) {
+		return crypto.randomUUID();
+	}
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+		const r = (Math.random() * 16) | 0;
+		return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+	});
+}
+
 export function makeQuestion(type = "Short Answer") {
 	return {
-		id: crypto.randomUUID(),
+		id: generateId(),
 		question: "",
 		question_type: type,
 		required: false,

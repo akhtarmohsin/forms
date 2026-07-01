@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import { makeQuestion } from "@/utils/questions";
+import { makeQuestion, generateId } from "@/utils/questions";
 import { surveyAPI } from "@/utils/api";
 
 export const useSurveyStore = defineStore("survey", () => {
@@ -68,7 +68,7 @@ export const useSurveyStore = defineStore("survey", () => {
 	function duplicateQuestion(id) {
 		const q = survey.value.questions.find((x) => x.id === id);
 		if (!q) return;
-		const copy = { ...JSON.parse(JSON.stringify(q)), id: crypto.randomUUID() };
+		const copy = { ...JSON.parse(JSON.stringify(q)), id: generateId() };
 		const idx = survey.value.questions.findIndex((x) => x.id === id);
 		survey.value.questions.splice(idx + 1, 0, copy);
 		activeQuestionId.value = copy.id;
@@ -99,7 +99,7 @@ export const useSurveyStore = defineStore("survey", () => {
 			...data,
 			questions: (data.questions || []).map((q) => ({
 				...q,
-				id: q.id || crypto.randomUUID(),
+				id: q.id || generateId(),
 				options: q.options || [],
 			})),
 		};
