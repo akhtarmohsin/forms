@@ -126,9 +126,9 @@
 							</svg>
 							Desk
 						</a>
-						<a
-							href="/api/method/logout"
-							class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+						<button
+							@click="logout"
+							class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
 						>
 							<svg
 								class="h-3.5 w-3.5 text-gray-400"
@@ -144,7 +144,7 @@
 								/>
 							</svg>
 							Logout
-						</a>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -278,6 +278,14 @@ const filteredSurveys = computed(() => {
 	}
 	return list;
 });
+
+async function logout() {
+	await fetch("/api/method/logout", {
+		method: "POST",
+		headers: { "X-Frappe-CSRF-Token": window.csrf_token || "" },
+	});
+	window.location.href = "/login";
+}
 
 function onClickOutside(e) {
 	if (avatarRef.value && !avatarRef.value.contains(e.target)) {
