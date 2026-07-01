@@ -41,7 +41,7 @@
 				</button>
 			</div>
 
-			<!-- Right: Search + Avatar + New button -->
+			<!-- Right: Search + New button + Avatar -->
 			<div class="flex items-center justify-end gap-2">
 				<!-- Search -->
 				<div class="relative">
@@ -65,6 +65,22 @@
 						class="h-7 w-44 rounded-md border border-gray-200 pl-8 pr-3 text-sm text-gray-700 placeholder-gray-400 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-300"
 					/>
 				</div>
+
+				<!-- New Form button -->
+				<button
+					@click="createNew"
+					class="inline-flex h-7 items-center gap-1.5 rounded-md bg-gray-900 px-3 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+				>
+					<svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 4v16m8-8H4"
+						/>
+					</svg>
+					New Form
+				</button>
 
 				<!-- User avatar dropdown -->
 				<div class="relative" ref="avatarRef">
@@ -131,22 +147,6 @@
 						</a>
 					</div>
 				</div>
-
-				<!-- New Form button -->
-				<button
-					@click="createNew"
-					class="inline-flex h-7 items-center gap-1.5 rounded-md bg-gray-900 px-3 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
-				>
-					<svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M12 4v16m8-8H4"
-						/>
-					</svg>
-					New Form
-				</button>
 			</div>
 		</header>
 
