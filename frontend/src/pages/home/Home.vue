@@ -1,67 +1,52 @@
 <template>
-	<div class="min-h-screen bg-gray-50">
-		<!-- Top Nav -->
-		<header class="bg-white border-b border-gray-200 sticky top-0 z-10">
-			<div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-				<div class="flex items-center gap-3">
-					<div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-						<svg
-							class="w-5 h-5 text-white"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-							/>
-						</svg>
-					</div>
-					<span class="font-semibold text-gray-900 text-lg">Forms</span>
-				</div>
-				<div class="flex items-center gap-3">
-					<span class="text-sm text-gray-500">{{ userDisplay }}</span>
-					<button
-						@click="createNew"
-						class="inline-flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+	<div class="flex h-screen flex-col bg-gray-50">
+		<!-- Navbar — Frappe standard -->
+		<header class="relative z-10 grid grid-cols-3 items-center border-b bg-white p-2">
+			<!-- Left: Logo + Title -->
+			<div class="flex items-center gap-2 pl-1">
+				<div
+					class="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 flex-shrink-0"
+				>
+					<svg
+						class="h-4 w-4 text-white"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
 					>
-						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M12 4v16m8-8H4"
-							/>
-						</svg>
-						New Form
-					</button>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+						/>
+					</svg>
 				</div>
+				<span class="text-base font-semibold text-gray-900">Forms</span>
 			</div>
-		</header>
 
-		<main class="max-w-7xl mx-auto px-6 py-8">
-			<!-- Filters & search -->
-			<div class="flex items-center justify-between mb-6">
-				<div class="flex items-center gap-3">
-					<button
-						v-for="tab in tabs"
-						:key="tab.value"
-						@click="activeTab = tab.value"
-						class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-						:class="
-							activeTab === tab.value
-								? 'bg-blue-50 text-blue-600'
-								: 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-						"
-					>
-						{{ tab.label }}
-					</button>
-				</div>
+			<!-- Center: Search + Tabs -->
+			<div class="flex items-center justify-center gap-1">
+				<button
+					v-for="tab in tabs"
+					:key="tab.value"
+					@click="activeTab = tab.value"
+					class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+					:class="
+						activeTab === tab.value
+							? 'bg-gray-100 text-gray-900'
+							: 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+					"
+				>
+					{{ tab.label }}
+				</button>
+			</div>
+
+			<!-- Right: Search + Avatar + New button -->
+			<div class="flex items-center justify-end gap-2">
+				<!-- Search -->
 				<div class="relative">
 					<svg
-						class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"
+						class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400"
 						fill="none"
 						stroke="currentColor"
 						viewBox="0 0 24 24"
@@ -77,73 +62,159 @@
 						v-model="search"
 						type="text"
 						placeholder="Search forms…"
-						class="pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-56"
+						class="h-7 w-44 rounded-md border border-gray-200 pl-8 pr-3 text-sm text-gray-700 placeholder-gray-400 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-300"
 					/>
 				</div>
-			</div>
 
-			<!-- Loading -->
-			<div
-				v-if="loading"
-				class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-			>
-				<div
-					v-for="i in 8"
-					:key="i"
-					class="bg-white rounded-xl border border-gray-200 p-5 animate-pulse h-40"
-				/>
-			</div>
-
-			<!-- Empty state -->
-			<div
-				v-else-if="filteredSurveys.length === 0"
-				class="flex flex-col items-center justify-center py-24 text-center"
-			>
-				<div
-					class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-4"
-				>
-					<svg
-						class="w-8 h-8 text-blue-500"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
+				<!-- User avatar dropdown -->
+				<div class="relative" ref="avatarRef">
+					<button
+						@click="showUserMenu = !showUserMenu"
+						class="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold text-gray-600 hover:bg-gray-300 transition-colors overflow-hidden"
 					>
+						<img
+							v-if="userImage"
+							:src="userImage"
+							:alt="userInitials"
+							class="h-full w-full object-cover"
+						/>
+						<span v-else>{{ userInitials }}</span>
+					</button>
+					<!-- Dropdown -->
+					<div
+						v-if="showUserMenu"
+						class="absolute right-0 top-9 w-44 rounded-lg border border-gray-100 bg-white py-1 shadow-lg z-50"
+					>
+						<div class="border-b border-gray-100 px-3 py-2">
+							<p class="text-sm font-medium text-gray-900 truncate">
+								{{ fullName }}
+							</p>
+							<p class="text-xs text-gray-400 truncate">{{ sessionUser }}</p>
+						</div>
+						<a
+							href="/app"
+							class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+						>
+							<svg
+								class="h-3.5 w-3.5 text-gray-400"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+								/>
+							</svg>
+							Desk
+						</a>
+						<a
+							href="/api/method/logout"
+							class="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+						>
+							<svg
+								class="h-3.5 w-3.5 text-gray-400"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+								/>
+							</svg>
+							Logout
+						</a>
+					</div>
+				</div>
+
+				<!-- New Form button -->
+				<button
+					@click="createNew"
+					class="inline-flex h-7 items-center gap-1.5 rounded-md bg-gray-900 px-3 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+				>
+					<svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							stroke-width="1.5"
-							d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+							stroke-width="2"
+							d="M12 4v16m8-8H4"
 						/>
 					</svg>
-				</div>
-				<h3 class="text-lg font-semibold text-gray-900 mb-2">No forms yet</h3>
-				<p class="text-gray-500 mb-6 text-sm max-w-xs">
-					Create your first form to start collecting responses from your audience.
-				</p>
-				<button
-					@click="createNew"
-					class="bg-blue-600 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-blue-700 transition-colors"
-				>
-					Create a form
+					New Form
 				</button>
 			</div>
+		</header>
 
-			<!-- Survey grid -->
-			<div
-				v-else
-				class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-			>
-				<SurveyCard
-					v-for="s in filteredSurveys"
-					:key="s.name"
-					:survey="s"
-					@edit="editSurvey(s)"
-					@delete="deleteSurvey(s)"
-					@duplicate="duplicateSurvey(s)"
-					@view-responses="viewResponses(s)"
-					@analytics="viewAnalytics(s)"
-					@toggle-status="toggleStatus(s)"
-				/>
+		<main class="flex-1 overflow-y-auto">
+			<div class="max-w-7xl mx-auto px-6 py-8">
+				<!-- Loading -->
+				<div
+					v-if="loading"
+					class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+				>
+					<div
+						v-for="i in 8"
+						:key="i"
+						class="bg-white rounded-xl border border-gray-200 p-5 animate-pulse h-40"
+					/>
+				</div>
+
+				<!-- Empty state -->
+				<div
+					v-else-if="filteredSurveys.length === 0"
+					class="flex flex-col items-center justify-center py-24 text-center"
+				>
+					<div
+						class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-4"
+					>
+						<svg
+							class="w-8 h-8 text-blue-500"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="1.5"
+								d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+							/>
+						</svg>
+					</div>
+					<h3 class="text-lg font-semibold text-gray-900 mb-2">No forms yet</h3>
+					<p class="text-gray-500 mb-6 text-sm max-w-xs">
+						Create your first form to start collecting responses from your audience.
+					</p>
+					<button
+						@click="createNew"
+						class="inline-flex h-7 items-center gap-1.5 rounded-md bg-gray-900 px-3 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+					>
+						Create a form
+					</button>
+				</div>
+
+				<!-- Survey grid -->
+				<div
+					v-else
+					class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+				>
+					<SurveyCard
+						v-for="s in filteredSurveys"
+						:key="s.name"
+						:survey="s"
+						@edit="editSurvey(s)"
+						@delete="deleteSurvey(s)"
+						@duplicate="duplicateSurvey(s)"
+						@view-responses="viewResponses(s)"
+						@analytics="viewAnalytics(s)"
+						@toggle-status="toggleStatus(s)"
+					/>
+				</div>
 			</div>
 		</main>
 
@@ -157,7 +228,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useSurveyStore } from "@/stores/survey";
 import { surveyAPI } from "@/utils/api";
@@ -172,9 +243,21 @@ const loading = ref(true);
 const search = ref("");
 const activeTab = ref("all");
 const showTemplatePicker = ref(false);
+const showUserMenu = ref(false);
+const avatarRef = ref(null);
 
-const userDisplay = computed(() => {
-	return window.frappe?.boot?.user_info?.full_name || window.frappe?.session?.user || "";
+const fullName = computed(
+	() => window.frappe?.boot?.user_info?.full_name || window.frappe?.session?.user || ""
+);
+const sessionUser = computed(() => window.frappe?.session?.user || "");
+const userImage = computed(() => window.frappe?.boot?.user_info?.user_image || null);
+const userInitials = computed(() => {
+	const name = fullName.value;
+	if (!name) return "?";
+	const parts = name.trim().split(" ");
+	return parts.length >= 2
+		? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+		: name[0].toUpperCase();
 });
 
 const tabs = [
@@ -195,6 +278,18 @@ const filteredSurveys = computed(() => {
 	}
 	return list;
 });
+
+function onClickOutside(e) {
+	if (avatarRef.value && !avatarRef.value.contains(e.target)) {
+		showUserMenu.value = false;
+	}
+}
+
+onMounted(() => {
+	loadSurveys();
+	document.addEventListener("click", onClickOutside);
+});
+onUnmounted(() => document.removeEventListener("click", onClickOutside));
 
 async function loadSurveys() {
 	loading.value = true;
@@ -254,6 +349,4 @@ async function toggleStatus(s) {
 		s.status = "Draft";
 	}
 }
-
-onMounted(loadSurveys);
 </script>

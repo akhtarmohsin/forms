@@ -36,13 +36,14 @@ export function getQuestionType(value) {
 }
 
 export function generateId() {
-	if (typeof crypto !== "undefined" && crypto.randomUUID) {
+	try {
 		return crypto.randomUUID();
+	} catch {
+		return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+			const r = (Math.random() * 16) | 0;
+			return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+		});
 	}
-	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-		const r = (Math.random() * 16) | 0;
-		return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
-	});
 }
 
 export function makeQuestion(type = "Short Answer") {

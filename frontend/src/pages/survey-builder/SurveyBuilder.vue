@@ -3,12 +3,12 @@
 		<!-- Left: Question panel -->
 		<aside class="builder-sidebar flex flex-col">
 			<!-- Header -->
-			<div class="p-4 border-b border-gray-100 flex items-center gap-2">
+			<div class="p-3 border-b border-gray-100 flex items-center gap-2">
 				<button
 					@click="router.push('/forms')"
-					class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600"
+					class="flex h-6 w-6 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors flex-shrink-0"
 				>
-					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -17,8 +17,25 @@
 						/>
 					</svg>
 				</button>
+				<div
+					class="flex h-5 w-5 items-center justify-center rounded bg-blue-600 flex-shrink-0"
+				>
+					<svg
+						class="h-3 w-3 text-white"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+						/>
+					</svg>
+				</div>
 				<span class="text-sm font-medium text-gray-700 truncate flex-1">{{
-					store.survey.survey_title
+					store.survey.survey_title || "Untitled Form"
 				}}</span>
 			</div>
 
@@ -74,32 +91,35 @@
 
 		<!-- Center: Canvas -->
 		<main class="flex-1 flex flex-col overflow-hidden">
-			<!-- Toolbar -->
-			<div
-				class="bg-white border-b border-gray-200 px-6 h-14 flex items-center justify-between"
-			>
-				<div class="flex items-center gap-3">
+			<!-- Toolbar — Frappe standard 3-col grid -->
+			<div class="relative z-10 grid grid-cols-3 items-center border-b bg-white p-2">
+				<!-- Left: empty (sidebar has the logo/back) -->
+				<div></div>
+
+				<!-- Center: Tabs -->
+				<div class="flex items-center justify-center gap-1">
 					<button
 						v-for="tab in ['Questions', 'Settings', 'Theme']"
 						:key="tab"
 						@click="activeTab = tab"
-						class="text-sm font-medium px-3 py-1.5 rounded-lg transition-colors"
+						class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
 						:class="
 							activeTab === tab
-								? 'bg-blue-50 text-blue-600'
-								: 'text-gray-500 hover:text-gray-700'
+								? 'bg-gray-100 text-gray-900'
+								: 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
 						"
 					>
 						{{ tab }}
 					</button>
 				</div>
 
-				<div class="flex items-center gap-3">
-					<span v-if="store.dirty" class="text-xs text-gray-400">Unsaved changes</span>
+				<!-- Right: Save, Preview, Publish -->
+				<div class="flex items-center justify-end gap-2">
+					<span v-if="store.dirty" class="text-xs text-gray-400">Unsaved</span>
 					<button
 						@click="saveAndClose"
 						:disabled="store.saving"
-						class="text-sm text-gray-600 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+						class="inline-flex h-7 items-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50"
 					>
 						{{ store.saving ? "Saving…" : "Save" }}
 					</button>
@@ -107,16 +127,17 @@
 						v-if="store.survey.name && store.survey.status === 'Published'"
 						:href="`/survey/${store.survey.survey_code}`"
 						target="_blank"
-						class="text-sm text-gray-600 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
-						>Preview ↗</a
+						class="inline-flex h-7 items-center rounded-md border border-gray-300 bg-white px-3 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
 					>
+						Preview ↗
+					</a>
 					<button
 						@click="publishSurvey"
-						class="text-sm font-medium px-4 py-1.5 rounded-lg transition-colors"
+						class="inline-flex h-7 items-center rounded-md px-3 text-sm font-medium transition-colors"
 						:class="
 							store.survey.status === 'Published'
-								? 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100'
-								: 'bg-blue-600 text-white hover:bg-blue-700'
+								? 'bg-green-600 text-white hover:bg-green-700'
+								: 'bg-gray-900 text-white hover:bg-gray-700'
 						"
 					>
 						{{ store.survey.status === "Published" ? "✓ Published" : "Publish" }}
