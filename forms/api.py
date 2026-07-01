@@ -2,22 +2,24 @@
 Forms app — all whitelisted API endpoints.
 No DocTypes. All data stored in a single JSON document per survey.
 """
+
 from __future__ import annotations
 
 import json
-from datetime import datetime, date
+from datetime import date, datetime
 
 import frappe
 from frappe import _
-from frappe.utils import now_datetime, get_url, cstr
 from frappe.rate_limiter import rate_limit
+from frappe.utils import cstr, get_url, now_datetime
 
 # ---------------------------------------------------------------------------
 # Survey CRUD
 # ---------------------------------------------------------------------------
 
+
 @frappe.whitelist()
-def get_surveys(status: str = None, search: str = None) -> list:
+def get_surveys(status: str | None = None, search: str | None = None) -> list:
 	"""List surveys owned by the current user (or all, for Survey Manager)."""
 	filters: dict = {}
 	if not frappe.has_permission("Forms Survey", "read", throw=False):
@@ -28,8 +30,7 @@ def get_surveys(status: str = None, search: str = None) -> list:
 	surveys = frappe.get_all(
 		"Forms Survey",
 		filters=filters,
-		fields=["name", "survey_title", "survey_code", "status", "total_responses",
-		        "modified", "owner"],
+		fields=["name", "survey_title", "survey_code", "status", "total_responses", "modified", "owner"],
 		order_by="modified desc",
 		limit=200,
 	)
@@ -178,9 +179,10 @@ def close_survey(name: str) -> dict:
 # Responses
 # ---------------------------------------------------------------------------
 
+
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=30, seconds=60)
-def submit_response(survey_code: str, answers: str, response_id: str = None) -> dict:
+def submit_response(survey_code: str, answers: str, response_id: str | None = None) -> dict:
 	"""Submit a completed survey response."""
 	survey_name = frappe.db.get_value("Forms Survey", {"survey_code": survey_code}, "name")
 	if not survey_name:
@@ -232,7 +234,7 @@ def submit_response(survey_code: str, answers: str, response_id: str = None) -> 
 
 
 @frappe.whitelist(allow_guest=True)
-def save_draft(survey_code: str, answers: str, response_id: str = None) -> dict:
+def save_draft(survey_code: str, answers: str, response_id: str | None = None) -> dict:
 	"""Save a draft response."""
 	survey_name = frappe.db.get_value("Forms Survey", {"survey_code": survey_code}, "name")
 	if not survey_name:
@@ -267,8 +269,14 @@ def get_responses(survey: str, page: int = 1) -> list:
 	return frappe.get_all(
 		"Forms Response",
 		filters={"survey": survey},
-		fields=["name", "respondent_name", "respondent_email", "completion_status",
-		        "submitted_on", "ip_address"],
+		fields=[
+			"name",
+			"respondent_name",
+			"respondent_email",
+			"completion_status",
+			"submitted_on",
+			"ip_address",
+		],
 		order_by="submitted_on desc",
 		limit_start=(int(page) - 1) * 50,
 		limit_page_length=50,
@@ -292,7 +300,9 @@ def get_response(name: str) -> dict:
 @frappe.whitelist()
 def export_responses(survey: str) -> str:
 	"""Export responses as CSV. Returns file URL."""
-	import csv, io
+	import csv
+	import io
+
 	from frappe.utils.file_manager import save_file
 
 	frappe.has_permission("Forms Survey", "read", doc=survey, throw=True)
@@ -302,8 +312,14 @@ def export_responses(survey: str) -> str:
 	responses = frappe.get_all(
 		"Forms Response",
 		filters={"survey": survey},
-		fields=["name", "respondent_name", "respondent_email", "completion_status",
-		        "submitted_on", "answers_data"],
+		fields=[
+			"name",
+			"respondent_name",
+			"respondent_email",
+			"completion_status",
+			"submitted_on",
+			"answers_data",
+		],
 		order_by="submitted_on desc",
 		limit=10000,
 	)
@@ -328,6 +344,7 @@ def export_responses(survey: str) -> str:
 # ---------------------------------------------------------------------------
 # Analytics
 # ---------------------------------------------------------------------------
+
 
 @frappe.whitelist()
 def get_analytics(survey: str) -> dict:
@@ -370,6 +387,7 @@ def get_analytics(survey: str) -> dict:
 # Templates
 # ---------------------------------------------------------------------------
 
+
 @frappe.whitelist()
 def get_templates() -> list:
 	return frappe.get_all(
@@ -381,7 +399,7 @@ def get_templates() -> list:
 
 
 @frappe.whitelist()
-def create_from_template(template_name: str, survey_title: str = None) -> dict:
+def create_from_template(template_name: str, survey_title: str | None = None) -> dict:
 	template = frappe.get_doc("Forms Template", template_name)
 	data = _safe_json(template.survey_data) or {}
 	doc = frappe.new_doc("Forms Survey")
@@ -396,6 +414,7 @@ def create_from_template(template_name: str, survey_title: str = None) -> dict:
 # ---------------------------------------------------------------------------
 # Question Bank
 # ---------------------------------------------------------------------------
+
 
 @frappe.whitelist()
 def get_question_bank(search: str = "") -> list:
@@ -426,6 +445,7 @@ def create_question_bank_item(data: str) -> dict:
 # Invitations
 # ---------------------------------------------------------------------------
 
+
 @frappe.whitelist()
 def send_invitations(survey: str, recipients: str) -> dict:
 	frappe.has_permission("Forms Survey", "write", doc=survey, throw=True)
@@ -455,6 +475,7 @@ def send_invitations(survey: str, recipients: str) -> dict:
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _serialize_survey(doc) -> dict:
 	return {
@@ -496,6 +517,7 @@ def _safe_json(val):
 
 def _check_dates(survey) -> None:
 	from frappe.utils import getdate, today
+
 	if survey.start_date and getdate(survey.start_date) > getdate(today()):
 		frappe.throw(_("This survey has not started yet"))
 	if survey.end_date and getdate(survey.end_date) < getdate(today()):

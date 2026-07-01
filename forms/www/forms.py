@@ -8,6 +8,7 @@ def get_context(context):
 
 	context.no_cache = 1
 	import socket
+
 	def _vite_running():
 		try:
 			s = socket.create_connection(("localhost", 8083), timeout=0.3)
@@ -15,6 +16,7 @@ def get_context(context):
 			return True
 		except OSError:
 			return False
+
 	context.vite_dev = frappe.conf.developer_mode and _vite_running()
 
 	user = frappe.session.user
